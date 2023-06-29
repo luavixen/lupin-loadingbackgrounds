@@ -5,14 +5,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +29,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public final class LoadingBackgrounds implements ClientModInitializer {
+@Mod("loadingbackgrounds")
+public final class LoadingBackgrounds {
 
     private static final Logger LOGGER = LogManager.getLogger("loadingbackgrounds");
 
@@ -39,6 +42,8 @@ public final class LoadingBackgrounds implements ClientModInitializer {
 
     public LoadingBackgrounds() {
         INSTANCE = this;
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
     }
 
     private Config config = Config.DEFAULT;
@@ -55,8 +60,7 @@ public final class LoadingBackgrounds implements ClientModInitializer {
     private double stateSecondsStarted = seconds();
     private boolean stateIsFading = false;
 
-    @Override
-    public void onInitializeClient() {
+    public void onCommonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("Setting up loadingbackgrounds...");
         config = Config.read();
     }
@@ -126,7 +130,7 @@ public final class LoadingBackgrounds implements ClientModInitializer {
                 .create();
 
         public static @NotNull Config read() {
-            Path pathDirectory = FabricLoaderImpl.INSTANCE.getConfigDir();
+            Path pathDirectory = FMLPaths.CONFIGDIR.get();
             Path pathFile = pathDirectory.resolve("loadingbackgrounds-config.json");
             Path pathTemp = pathDirectory.resolve("loadingbackgrounds-config.json.tmp");
 
