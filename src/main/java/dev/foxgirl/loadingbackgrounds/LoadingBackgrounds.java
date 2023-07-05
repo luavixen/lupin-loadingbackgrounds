@@ -162,6 +162,7 @@ public final class LoadingBackgrounds implements ClientModInitializer {
     }
 
     public interface TextureInfo {
+        void loadingbackgrounds$init();
         int loadingbackgrounds$getWidth();
         int loadingbackgrounds$getHeight();
     }
@@ -188,6 +189,8 @@ public final class LoadingBackgrounds implements ClientModInitializer {
 
     private static void drawBackgroundTexture(DrawContext context, Screen screen, Identifier texture, float brightness, float opacity) {
         var textureInfo = (TextureInfo) getTextureManager().getTexture(texture);
+
+        textureInfo.loadingbackgrounds$init();
 
         float textureWidth = textureInfo.loadingbackgrounds$getWidth();
         float textureHeight = textureInfo.loadingbackgrounds$getHeight();
