@@ -11,8 +11,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.texture.TextureManager;
+import net.minecraft.resource.ReloadableResourceManagerImpl;
+import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourcePackManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Unit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -22,10 +26,9 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.regex.Pattern;
 
 public final class LoadingBackgrounds implements ClientModInitializer {
 
@@ -173,14 +176,54 @@ public final class LoadingBackgrounds implements ClientModInitializer {
     private static ResourceManager getResourceManager() {
         return getClient().getResourceManager();
     }
+    private static ResourcePackManager getResourcePackManager() {
+        return getClient().getResourcePackManager();
+    }
     private static TextureManager getTextureManager() {
         return getClient().getTextureManager();
     }
 
+    private static final Pattern PROFILE_NAME_PATTERN =
+        Pattern.compile("load(ing)?\\W?(background|image)", Pattern.CASE_INSENSITIVE);
+
+    private static void reloadResourcePacks() {
+        var resourceManager = (ReloadableResourceManagerImpl) getResourceManager();
+        var resourcePackManager = getResourcePackManager();
+
+        var profiles = resourcePackManager.getProfiles();
+        var profilesEnabled = resourcePackManager.getEnabledProfiles();
+
+        boolean reload = false;
+
+        for (var profile : profiles) {
+            if (!profilesEnabled.contains(profile) && PROFILE_NAME_PATTERN.matcher(profile.getName()).find()) {
+                LOGGER.info("Enabling resource pack " + profile.getName());
+                resourcePackManager.enable(profile.getName());
+                reload = true;
+            }
+        }
+
+        if (reload) {
+            resourceManager.reload(
+                getClient(), getClient(),
+                CompletableFuture.completedFuture(Unit.INSTANCE),
+                resourcePackManager.createResourcePacks()
+            );
+        }
+    }
+
+    private static Map<Identifier, Resource> getBackgroundTextureResources() {
+        return getResourceManager().findResources("textures/gui/backgrounds", (filename) -> filename.getPath().endsWith(".png"));
+    }
+
     private static Iterator<Identifier> getBackgroundTextures() {
-        var resources = getResourceManager().findResources("textures/gui/backgrounds", (filename) -> filename.getPath().endsWith(".png"));
+        var resources = getBackgroundTextureResources();
         if (resources.isEmpty()) {
-            return null;
+            reloadResourcePacks();
+            resources = getBackgroundTextureResources();
+            if (resources.isEmpty()) {
+                return null;
+            }
         }
         @SuppressWarnings({"unchecked", "rawtypes"})
         List<Identifier> textures = (List) Arrays.asList(resources.keySet().toArray());
