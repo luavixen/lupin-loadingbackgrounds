@@ -7,8 +7,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 
-import java.util.Objects;
-
 @Mixin(MessageScreen.class)
 public abstract class MixinMessageScreen extends Screen {
 
@@ -16,11 +14,21 @@ public abstract class MixinMessageScreen extends Screen {
         super(title);
     }
 
-    @Override
-    public void renderBackgroundTexture(DrawContext context) {
-        super.renderBackgroundTexture(context);
-        if (Objects.equals(this.getTitle(), Text.translatable("selectWorld.data_read"))) {
+    // Overwrite for 1.20.5 and higher
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        if (LoadingBackgrounds.getInstance().isLoadingMessage(this.getTitle())) {
             LoadingBackgrounds.getInstance().draw(context, this);
+        } else {
+            LoadingBackgrounds.getInstance().drawDefaultBackground(context, this);
+        }
+    }
+
+    // Overwrite for 1.20.4 and lower
+    public void renderBackgroundTexture(DrawContext context) {
+        if (LoadingBackgrounds.getInstance().isLoadingMessage(this.getTitle())) {
+            LoadingBackgrounds.getInstance().draw(context, this);
+        } else {
+            LoadingBackgrounds.getInstance().drawDefaultBackground(context, this);
         }
     }
 

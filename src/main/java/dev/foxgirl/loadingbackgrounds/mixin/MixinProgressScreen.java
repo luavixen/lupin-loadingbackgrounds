@@ -14,9 +14,13 @@ public abstract class MixinProgressScreen extends Screen {
         super(title);
     }
 
-    @Override
+    // Overwrite for 1.20.5 and higher
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        LoadingBackgrounds.getInstance().draw(context, this);
+    }
+
+    // Overwrite for 1.20.4 and lower
     public void renderBackgroundTexture(DrawContext context) {
-        super.renderBackgroundTexture(context);
         LoadingBackgrounds.getInstance().draw(context, this);
     }
 
