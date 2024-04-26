@@ -13,6 +13,7 @@ import net.minecraft.resource.*;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -317,7 +318,13 @@ public final class LoadingBackgrounds extends Screen {
         return matchesProfileNamePattern(getProfileID(profile)) || matchesProfileNamePattern(profile.getDisplayName().getString());
     }
 
+    private static boolean areConflictingModsLoaded() {
+        return ModList.get().isLoaded("mahoutsukai");
+    }
+
     private static void reloadResourcePacks() {
+        if (areConflictingModsLoaded()) return;
+
         var resourceManager = (ReloadableResourceManagerImpl) getResourceManager();
         var resourcePackManager = getResourcePackManager();
 
