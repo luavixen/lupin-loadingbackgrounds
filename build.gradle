@@ -9,19 +9,14 @@ version = project.mod_version + "-" + project.mod_loader + "-" + project.minecra
 
 loom {
     accessWidenerPath = file 'src/main/resources/loadingbackgrounds.accesswidener'
-    forge {
-        mixinConfig 'loadingbackgrounds.mixins.json'
-    }
-    runs {
-        data {
-            data()
-            programArgs '--existing', file('src/main/resources').absolutePath
-        }
-    }
 }
 
 repositories {
     mavenCentral()
+    maven {
+        name = 'Neoforged'
+        url = 'https://maven.neoforged.net/releases/'
+    }
 }
 
 configurations {
@@ -37,8 +32,11 @@ configurations {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_version}:v2"
-    forge "net.minecraftforge:forge:${project.forge_version}"
+    mappings loom.layered {
+        it.mappings("net.fabricmc:yarn:1.20.5+build.1:v2")
+        it.mappings("dev.architectury:yarn-mappings-patch-neoforge:1.20.5+build.3")
+    }
+    neoForge "net.neoforged:neoforge:${project.neoforge_version}"
 }
 
 java {
@@ -47,7 +45,7 @@ java {
 }
 
 compileJava {
-    options.release = 17
+    options.release = 21
     options.encoding = 'UTF-8'
 }
 

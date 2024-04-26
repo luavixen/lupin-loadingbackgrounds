@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[41,)"
+loaderVersion = "[1,)"
 
 license = "UNLICENSED"
 
@@ -13,16 +13,19 @@ displayURL = "https://legacy.curseforge.com/minecraft/mc-mods/loadingbackgrounds
 authors = "lupiiin_, luavixen <lua@foxgirl.dev> (https://foxgirl.dev/)"
 description = "Custom loading screen backgrounds."
 
+[[mixins]]
+config = "loadingbackgrounds.mixins.json"
+
 [[dependencies.trimeffects]]
-modId = "forge"
+modId = "neoforge"
 mandatory = true
-versionRange = "[41,)"
+versionRange = "[20.5,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.trimeffects]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19,)"
+versionRange = "[1.20.5,)"
 ordering = "NONE"
 side = "BOTH"
