@@ -44,6 +44,6 @@ compileJava {
 
 processResources {
     filesMatching('fabric.mod.json') {
-        expand 'version': version
+        expand 'version': project.mod_version
     }
 }
