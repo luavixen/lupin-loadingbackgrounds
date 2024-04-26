@@ -2,11 +2,11 @@ package dev.foxgirl.loadingbackgrounds.mixin;
 
 import dev.foxgirl.loadingbackgrounds.LoadingBackgrounds;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.WorldGenerationProgressTracker;
-import net.minecraft.client.gui.screen.LevelLoadingScreen;
+// import net.minecraft.client.gui.WorldGenerationProgressTracker;
+// import net.minecraft.client.gui.screen.LevelLoadingScreen;
 import net.minecraft.client.gui.screen.Screen;
-// import net.minecraft.client.gui.screen.world.LevelLoadingScreen;
-// import net.minecraft.server.WorldGenerationProgressTracker;
+import net.minecraft.client.gui.screen.world.LevelLoadingScreen;
+import net.minecraft.server.WorldGenerationProgressTracker;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
