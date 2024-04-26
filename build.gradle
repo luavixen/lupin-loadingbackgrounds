@@ -53,7 +53,7 @@ compileJava {
 
 processResources {
     filesMatching("META-INF/mods.toml") {
-        expand 'version': version
+        expand 'version': project.mod_version
     }
 }
 
