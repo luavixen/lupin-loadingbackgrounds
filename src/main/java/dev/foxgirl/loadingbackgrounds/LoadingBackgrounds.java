@@ -195,7 +195,7 @@ public final class LoadingBackgrounds extends Screen implements ClientModInitial
         drawDefaultBackgroundActual(context, screen);
     }
 
-    /* Implementation for 1.20.5 and higher
+    /* Implementation for 1.20.5 and higher */
     private void drawDefaultBackgroundActual(DrawContext context, Screen screen) {
         float delta = client.getLastFrameDuration();
         if (client.world == null) {
@@ -203,14 +203,14 @@ public final class LoadingBackgrounds extends Screen implements ClientModInitial
         }
         applyBlur(delta);
         renderDarkening(context);
-    } */
+    }
 
-    /* Implementation for 1.20.4 and lower */
+    /* Implementation for 1.20.4 and lower
     private void drawDefaultBackgroundActual(DrawContext context, Screen screen) {
         context.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
         context.drawTexture(OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0.0F, 0.0F, width, height, 32, 32);
         context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-    }
+    } */
 
     public enum Position {
         CENTER, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
@@ -301,9 +301,9 @@ public final class LoadingBackgrounds extends Screen implements ClientModInitial
 
     private static String getProfileID(ResourcePackProfile profile) {
         // 1.20.5 and higher
-        // return profile.getId();
+        return profile.getId();
         // 1.20.4 and lower
-        return profile.getName();
+        // return profile.getName();
     }
 
     private static boolean matchesProfileNamePattern(String name) {
