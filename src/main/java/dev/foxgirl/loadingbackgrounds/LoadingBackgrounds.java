@@ -114,6 +114,7 @@ public final class LoadingBackgrounds extends Screen implements ClientModInitial
 
             if (textures == null) {
                 drawDefaultBackground(context, screen);
+                return;
             }
 
             texturePrevious = textures.next();
