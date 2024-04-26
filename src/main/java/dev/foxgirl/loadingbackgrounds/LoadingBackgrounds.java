@@ -118,6 +118,7 @@ public final class LoadingBackgrounds extends Screen {
 
             if (textures == null) {
                 drawDefaultBackground(context, screen);
+                return;
             }
 
             texturePrevious = textures.next();

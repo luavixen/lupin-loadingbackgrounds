@@ -5,7 +5,7 @@ plugins {
 group = project.mod_group
 archivesBaseName = project.mod_name
 
-version = project.mod_version
+version = project.mod_version + "-" + project.mod_loader + "-" + project.minecraft_version
 
 loom {
     accessWidenerPath = file 'src/main/resources/loadingbackgrounds.accesswidener'
