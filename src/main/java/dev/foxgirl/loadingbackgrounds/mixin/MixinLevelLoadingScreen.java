@@ -63,10 +63,10 @@ public abstract class MixinLevelLoadingScreen extends Screen {
             switch (position.ordinal()) {
                 case 1:
                 case 2:
-                    return size + (size / 4);
+                    return size + (size / 4) + 15;
                 case 3:
                 case 4:
-                    return height - 30 - size - (size / 4);
+                    return height - size - (size / 4);
             }
         }
 
