@@ -16,14 +16,14 @@ description = "Custom loading screen backgrounds."
 [[mixins]]
 config = "loadingbackgrounds.mixins.json"
 
-[[dependencies.trimeffects]]
+[[dependencies.loadingbackgrounds]]
 modId = "neoforge"
 mandatory = true
 versionRange = "[20.5,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.trimeffects]]
+[[dependencies.loadingbackgrounds]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.20.5,)"
