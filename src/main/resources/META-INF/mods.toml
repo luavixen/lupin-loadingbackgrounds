@@ -13,14 +13,14 @@ displayURL = "https://legacy.curseforge.com/minecraft/mc-mods/loadingbackgrounds
 authors = "lupiiin_, luavixen <lua@foxgirl.dev> (https://foxgirl.dev/)"
 description = "Custom loading screen backgrounds."
 
-[[dependencies.trimeffects]]
+[[dependencies.loadingbackgrounds]]
 modId = "forge"
 mandatory = true
 versionRange = "[50,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.trimeffects]]
+[[dependencies.loadingbackgrounds]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.20.5,)"
