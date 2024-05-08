@@ -1,5 +1,6 @@
 package dev.foxgirl.loadingbackgrounds;
 
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -13,7 +14,7 @@ public final class LoadingBackgroundsMod {
     }
 
     public void onClientSetup(FMLClientSetupEvent event) {
-        LoadingBackgrounds.createInstance().init(FMLPaths.CONFIGDIR.get(), true);
+        LoadingBackgrounds.createInstance().init(FMLPaths.CONFIGDIR.get(), !ModList.get().isLoaded("mahoutsukai"));
     }
 
 }
