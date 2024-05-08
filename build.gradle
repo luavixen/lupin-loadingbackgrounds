@@ -42,7 +42,7 @@ allprojects {
     apply plugin: 'architectury-plugin'
 
     base {
-        archivesName = "${rootProject.mod_name}-${project.name}"
+        archivesName = "${rootProject.mod_name}-${project.name}-${rootProject.minecraft_version}"
     }
 
     version = rootProject.mod_version
