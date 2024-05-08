@@ -1,0 +1,37 @@
+{
+    "schemaVersion": 1,
+
+    "id": "loadingbackgrounds",
+    "version": "${version}",
+
+    "depends": {
+        "java": ">=17",
+        "minecraft": ">=${mcversion}",
+        "fabricloader": ">=0.14.0"
+    },
+
+    "name": "Loading Backgrounds",
+    "description": "Custom loading screen backgrounds.",
+
+    "icon": "assets/loadingbackgrounds/icon.png",
+
+    "license": "UNLICENSED",
+    "authors": [
+        {
+            "name": "luavixen",
+            "contact": {
+                "email": "lua@foxgirl.dev",
+                "website": "https://foxgirl.dev/"
+            }
+        }
+    ],
+
+    "entrypoints": {
+        "client": [
+            "dev.foxgirl.loadingbackgrounds.LoadingBackgroundsMod"
+        ]
+    },
+    "mixins": [
+        "loadingbackgrounds.mixins.json"
+    ]
+}

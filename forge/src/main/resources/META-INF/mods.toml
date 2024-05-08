@@ -1,0 +1,30 @@
+modLoader = "javafml"
+loaderVersion = "[50,)"
+
+license = "UNLICENSED"
+
+[[mods]]
+modId = "loadingbackgrounds"
+version = "${version}"
+
+displayName = "Loading Backgrounds"
+displayURL = "https://legacy.curseforge.com/minecraft/mc-mods/loadingbackgrounds"
+
+authors = "lupiiin_, luavixen <lua@foxgirl.dev> (https://foxgirl.dev/)"
+description = "Custom loading screen backgrounds."
+
+logoFile = "assets/loadingbackgrounds/icon.png"
+
+[[dependencies.loadingbackgrounds]]
+modId = "forge"
+mandatory = true
+versionRange = "[50,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.loadingbackgrounds]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[${mcversion},)"
+ordering = "NONE"
+side = "BOTH"
