@@ -7,9 +7,9 @@ import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 
 // 1.20.5 and higher
-import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
+// import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
 // 1.20.4 and lower
-// import net.minecraft.client.gui.screen.ConnectScreen;
+import net.minecraft.client.gui.screen.ConnectScreen;
 
 @Mixin(ConnectScreen.class)
 public abstract class MixinConnectScreen extends Screen {

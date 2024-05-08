@@ -21,7 +21,7 @@ config = "loadingbackgrounds.mixins.json"
 [[dependencies.loadingbackgrounds]]
 modId = "neoforge"
 mandatory = true
-versionRange = "[20.5,)"
+versionRange = "[20.2,)"
 ordering = "NONE"
 side = "BOTH"
 

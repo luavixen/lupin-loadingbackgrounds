@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 // 1.20.5 and higher
-import net.minecraft.server.WorldGenerationProgressTracker;
-import net.minecraft.client.gui.screen.world.LevelLoadingScreen;
+// import net.minecraft.server.WorldGenerationProgressTracker;
+// import net.minecraft.client.gui.screen.world.LevelLoadingScreen;
 // 1.20.4 and lower
-// import net.minecraft.client.gui.WorldGenerationProgressTracker;
-// import net.minecraft.client.gui.screen.LevelLoadingScreen;
+import net.minecraft.client.gui.WorldGenerationProgressTracker;
+import net.minecraft.client.gui.screen.LevelLoadingScreen;
 
 @Mixin(LevelLoadingScreen.class)
 public abstract class MixinLevelLoadingScreen extends Screen {
@@ -66,10 +66,10 @@ public abstract class MixinLevelLoadingScreen extends Screen {
             switch (position.ordinal()) {
                 case 1:
                 case 2:
-                    return size + (size / 4) + 15;
+                    return size + (size / 4);
                 case 3:
                 case 4:
-                    return height - size - (size / 4);
+                    return height - 30 - size - (size / 4);
             }
         }
 

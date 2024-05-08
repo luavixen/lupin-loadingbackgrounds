@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[50,)"
+loaderVersion = "[41,)"
 
 license = "UNLICENSED"
 
@@ -18,7 +18,7 @@ logoFile = "assets/loadingbackgrounds/icon.png"
 [[dependencies.loadingbackgrounds]]
 modId = "forge"
 mandatory = true
-versionRange = "[50,)"
+versionRange = "[41,)"
 ordering = "NONE"
 side = "BOTH"
 
