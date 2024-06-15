@@ -8,7 +8,7 @@ modId = "loadingbackgrounds"
 version = "${version}"
 
 displayName = "Loading Backgrounds"
-displayURL = "https://legacy.curseforge.com/minecraft/mc-mods/loadingbackgrounds"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/loading-backgrounds"
 
 authors = "lupiiin_, luavixen <lua@foxgirl.dev> (https://foxgirl.dev/)"
 description = "Custom loading screen backgrounds."
