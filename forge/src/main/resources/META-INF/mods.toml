@@ -18,7 +18,7 @@ logoFile = "assets/loadingbackgrounds/icon.png"
 [[dependencies.loadingbackgrounds]]
 modId = "forge"
 mandatory = true
-versionRange = "[50,)"
+versionRange = "[51,)"
 ordering = "NONE"
 side = "BOTH"
 

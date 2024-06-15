@@ -179,7 +179,7 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
         var oldShaderColor = RenderSystem.getShaderColor();
         var oldShaderTexture = RenderSystem.getShaderTexture(0);
 
-        RenderSystem.setShaderColor(brightness, brightness, brightness, opacity );
+        RenderSystem.setShaderColor(brightness, brightness, brightness, opacity);
 
         context.drawTexture(texture, 0, 0, 0, offsetX, offsetY, (int) screenWidth, (int) screenHeight, (int) (textureWidth * scaleX), (int) (textureHeight * scaleY));
         // void drawTexture(Identifier texture, int x, int y, int z, float u, float v, int width, int height, int textureWidth, int textureHeight)
@@ -196,9 +196,9 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
         drawDefaultBackgroundActual(context, screen);
     }
 
-    /* Implementation for 1.20.5 and higher */
+    /* Implementation for ~~1.20.5~~ 1.21.0 and higher */
     private void drawDefaultBackgroundActual(DrawContext context, Screen screen) {
-        float delta = client.getLastFrameDuration();
+        float delta = client.getRenderTickCounter().getLastDuration();
         if (client.world == null) {
             renderPanoramaBackground(context, delta);
         }
@@ -218,7 +218,7 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
     }
 
     public record Config(double secondsStay, double secondsFade, float brightness, @NotNull Position position) {
-        private static final Config DEFAULT = new Config(3.0D, 0.75D, 0.66F, Position.BOTTOM_RIGHT);
+        private static final Config DEFAULT = new Config(5.0D, 0.5D, 1.0F, Position.BOTTOM_RIGHT);
         private static final String DEFAULT_JSON =
             """
             {

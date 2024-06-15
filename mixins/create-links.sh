@@ -1,27 +1,36 @@
 #!/bin/sh
 
+export MSYS=winsymlinks:nativestrict
+
+mod_config_name="loadingbackgrounds.mixins.json"
+mod_source_path="dev/foxgirl/loadingbackgrounds"
+
 cd ..
 
-for loader in fabric forge neoforge; do
+for loader in fabric neoforge forge; do
 
-  echo "Creating links for loader $loader..."
+    if [ -d $loader ]; then
 
-  set -o xtrace
+        echo "Creating links for loader $loader..."
 
-  cd $loader/src/main
+        set -o xtrace
 
-  cd resources
-  rm loadingbackgrounds.mixins.json
-  ln -s ../../../../mixins/loadingbackgrounds.mixins.json loadingbackgrounds.mixins.json
-  cd ..
+        cd $loader/src/main
 
-  cd java/dev/foxgirl/loadingbackgrounds
-  rm mixin
-  ln -s ../../../../../../../mixins/mixin mixin
-  cd ../../../..
+        cd resources
+        rm $mod_config_name
+        ln -s ../../../../mixins/$mod_config_name $mod_config_name
+        cd ..
 
-  cd ../../..
+        cd java/$mod_source_path
+        rm -r mixin
+        ln -s ../../../../../../../mixins/mixin mixin
+        cd ../../../..
 
-  set +o xtrace
+        cd ../../..
+
+        set +o xtrace
+
+    fi
 
 done
