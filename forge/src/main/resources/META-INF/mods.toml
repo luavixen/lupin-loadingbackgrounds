@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[50,)"
+loaderVersion = "[1,)"
 
 license = "UNLICENSED"
 
