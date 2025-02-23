@@ -35,12 +35,20 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
     private static LoadingBackgroundsImpl INSTANCE;
 
     public static LoadingBackgroundsImpl getInstance() {
+        if (INSTANCE == null) {
+            throw new IllegalStateException("""
+                Tried to access LoadingBackgroundsImpl instance before it was initialized
+
+                This usually happens when one of the possible loading screens
+                attempts to render before the mod initialization step finishes.
+
+                This is probably a conflict with another mod!
+            """);
+        }
         return INSTANCE;
     }
 
     private Config config = Config.DEFAULT;
-
-    private boolean shouldLoadResources = true;
 
     public LoadingBackgroundsImpl() {
         super(Text.empty());
@@ -48,21 +56,12 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
     }
 
     @Override
-    public void init(@NotNull Path configDirectory, boolean shouldLoadResources) {
+    public void init(@NotNull Path configDirectory) {
         LOGGER.info("Setting up Loading Backgrounds...");
-        this.config = Config.read(configDirectory);
-        this.shouldLoadResources = shouldLoadResources;
+        config = Config.read(configDirectory);
     }
 
-    private Iterator<Identifier> textures;
-
-    private Identifier texturePrevious;
-    private Identifier textureCurrent;
-
-    private double stateSecondsStarted = seconds();
-    private boolean stateIsFading = false;
-
-    private final Set<String> loadingMessageTranslationKeys = new HashSet<>(Arrays.asList(new String[] {
+    private static final Set<String> loadingMessageTranslationKeys = new HashSet<>(Arrays.asList(new String[] {
         "menu.generatingLevel",
         "menu.generatingTerrain",
         "menu.loadingForcedChunks",
@@ -81,7 +80,7 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
         "download.pack.title",
     }));
 
-    public boolean isLoadingMessage(@Nullable Text message) {
+    public static boolean isLoadingMessage(@Nullable Text message) {
         if (message != null) {
             var content = message.getContent();
             if (content instanceof TranslatableTextContent) {
@@ -90,6 +89,15 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
         }
         return false;
     }
+
+    private Iterator<Identifier> textures;
+
+    private Identifier texturePrevious;
+    private Identifier textureCurrent;
+
+    private double stateSecondsStarted = seconds();
+    private boolean stateIsFading = false;
+
 
     public @NotNull Position getPosition() {
         return config.position();
@@ -179,7 +187,7 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
         var oldShaderColor = RenderSystem.getShaderColor();
         var oldShaderTexture = RenderSystem.getShaderTexture(0);
 
-        RenderSystem.setShaderColor(brightness, brightness, brightness, opacity );
+        RenderSystem.setShaderColor(brightness, brightness, brightness, opacity);
 
         context.drawTexture(texture, 0, 0, 0, offsetX, offsetY, (int) screenWidth, (int) screenHeight, (int) (textureWidth * scaleX), (int) (textureHeight * scaleY));
         // void drawTexture(Identifier texture, int x, int y, int z, float u, float v, int width, int height, int textureWidth, int textureHeight)
@@ -217,10 +225,24 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
         CENTER, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
     }
 
-    public record Config(double secondsStay, double secondsFade, float brightness, @NotNull Position position) {
-        private static final Config DEFAULT = new Config(3.0D, 0.75D, 0.66F, Position.BOTTOM_RIGHT);
+    public record Config(
+        double secondsStay,
+        double secondsFade,
+        float brightness,
+        @NotNull Position position,
+        boolean shouldLoadResources
+    ) {
+        private static final Gson GSON =
+            new GsonBuilder()
+                .disableHtmlEscaping()
+                .serializeNulls()
+                .setPrettyPrinting()
+                .setLenient()
+                .create();
+
         private static final String DEFAULT_JSON =
             """
+            // Loading Backgrounds configuration JSON file
             {
               // Amount of time that each background is displayed for
               "secondsStay": 5.0,
@@ -230,26 +252,21 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
               "brightness": 1.0,
               // Level loading indicator position
               // One of "CENTER", "BOTTOM_LEFT", "BOTTOM_RIGHT", "TOP_LEFT", or "TOP_RIGHT"
-              "position": "BOTTOM_RIGHT"
+              "position": "BOTTOM_RIGHT",
+              // Should we try to forcefully load any resource packs that could contain background images?
+              "shouldLoadResources": false
             }
             """;
-
-        private static final Gson GSON =
-            new GsonBuilder()
-                .disableHtmlEscaping()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .setLenient()
-                .create();
+        private static final Config DEFAULT = GSON.fromJson(DEFAULT_JSON, Config.class);
 
         public static @NotNull Config read(@NotNull Path pathConfigDirectory) {
             Path pathFile = pathConfigDirectory.resolve("loadingbackgrounds-config.json");
             Path pathTemp = pathConfigDirectory.resolve("loadingbackgrounds-config.json.tmp");
 
-            try {
-                return GSON.fromJson(Files.newBufferedReader(pathFile), Config.class);
+            try (var reader = Files.newBufferedReader(pathFile)) {
+                return GSON.fromJson(reader, Config.class);
             } catch (NoSuchFileException cause) {
-                LOGGER.error("Failed to read config, file not found");
+                LOGGER.warn("Failed to read config, file not found");
             } catch (IOException cause) {
                 LOGGER.error("Failed to read config, IO error", cause);
             } catch (JsonParseException cause) {
@@ -314,7 +331,7 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
     }
 
     private void reloadResourcePacks() {
-        if (!shouldLoadResources) return;
+        if (!config.shouldLoadResources()) return;
 
         var resourceManager = (ReloadableResourceManagerImpl) getResourceManager();
         var resourcePackManager = getResourcePackManager();

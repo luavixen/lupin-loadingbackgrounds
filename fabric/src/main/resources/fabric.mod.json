@@ -5,8 +5,8 @@
     "version": "${version}",
 
     "depends": {
-        "java": ">=17",
-        "minecraft": ">=${mcversion}",
+        "java": ">=21",
+        "minecraft": "${minecraft_version_semver}",
         "fabricloader": ">=0.14.0"
     },
 
@@ -22,6 +22,12 @@
             "contact": {
                 "email": "lua@foxgirl.dev",
                 "website": "https://foxgirl.dev/"
+            }
+        },
+        {
+            "name": "Lupin",
+            "contact": {
+                "website": "https://www.youtube.com/@LupinYT"
             }
         }
     ],

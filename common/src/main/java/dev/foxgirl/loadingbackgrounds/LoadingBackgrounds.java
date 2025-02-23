@@ -6,7 +6,7 @@ import java.nio.file.Path;
 
 public interface LoadingBackgrounds {
 
-    void init(@NotNull Path configDirectory, boolean shouldLoadResources);
+    void init(@NotNull Path configDirectory);
 
     static @NotNull LoadingBackgrounds createInstance() throws IllegalStateException {
         try {
