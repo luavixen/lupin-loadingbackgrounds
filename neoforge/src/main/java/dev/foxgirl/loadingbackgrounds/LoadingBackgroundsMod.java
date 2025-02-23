@@ -13,7 +13,7 @@ public final class LoadingBackgroundsMod {
     }
 
     public void onClientSetup(FMLClientSetupEvent event) {
-        LoadingBackgrounds.createInstance().init(FMLPaths.CONFIGDIR.get(), true);
+        LoadingBackgrounds.createInstance().init(FMLPaths.CONFIGDIR.get());
     }
 
 }

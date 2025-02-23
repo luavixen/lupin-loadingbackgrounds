@@ -7,7 +7,7 @@ public final class LoadingBackgroundsMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        LoadingBackgrounds.createInstance().init(FabricLoader.getInstance().getConfigDir(), true);
+        LoadingBackgrounds.createInstance().init(FabricLoader.getInstance().getConfigDir());
     }
 
 }
