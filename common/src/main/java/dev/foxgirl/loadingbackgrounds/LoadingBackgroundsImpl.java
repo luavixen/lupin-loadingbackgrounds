@@ -109,7 +109,7 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
         height = screen.height;
     }
 
-    public void draw(DrawContext context, Screen screen) {
+    public boolean draw(DrawContext context, Screen screen, boolean shouldDrawDefaultBackground) {
         double secondsNow = seconds();
         double secondsDiff = secondsNow - stateSecondsStarted;
 
@@ -122,8 +122,10 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
             textures = getBackgroundTextures();
 
             if (textures == null) {
-                drawDefaultBackground(context, screen);
-                return;
+                if (shouldDrawDefaultBackground) {
+                    drawDefaultBackground(context, screen);
+                }
+                return false;
             }
 
             texturePrevious = textures.next();
@@ -146,6 +148,8 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
                 textureCurrent = textures.next();
             }
         }
+
+        return true;
     }
 
     public void drawCustomBackground(DrawContext context, Screen screen, Identifier texture, float brightness, float opacity) {
