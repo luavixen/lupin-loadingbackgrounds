@@ -25,11 +25,11 @@ public abstract class MixinMessageScreen extends Screen {
 
     // Overwrite for 1.20.4 and lower
     public void renderBackgroundTexture(DrawContext context) {
-        if (LoadingBackgroundsImpl.isLoadingMessage(getTitle())) {
-            LoadingBackgroundsImpl.getInstance().draw(context, this, true);
-        } else {
-            LoadingBackgroundsImpl.getInstance().drawDefaultBackground(context, this);
-        }
+        if (
+            LoadingBackgroundsImpl.isLoadingMessage(getTitle()) &&
+            LoadingBackgroundsImpl.getInstance().draw(context, this, true)
+        ) return;
+        super.renderBackgroundTexture(context);
     }
 
 }

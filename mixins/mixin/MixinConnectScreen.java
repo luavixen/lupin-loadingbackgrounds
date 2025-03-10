@@ -26,7 +26,8 @@ public abstract class MixinConnectScreen extends Screen {
 
     // Overwrite for 1.20.4 and lower
     public void renderBackgroundTexture(DrawContext context) {
-        LoadingBackgroundsImpl.getInstance().draw(context, this, true);
+        if (LoadingBackgroundsImpl.getInstance().draw(context, this, true)) return;
+        super.renderBackgroundTexture(context);
     }
 
 }
