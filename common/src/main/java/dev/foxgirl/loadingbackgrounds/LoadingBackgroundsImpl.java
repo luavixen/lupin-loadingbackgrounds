@@ -8,6 +8,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.texture.MissingSprite;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.resource.*;
 import net.minecraft.text.Text;
@@ -133,34 +134,47 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
         }
 
         if (stateIsFading) {
-            drawCustomBackground(context, screen, texturePrevious, config.brightness(), 1.0F);
-            drawCustomBackground(context, screen, textureCurrent, config.brightness(), (float) Math.min(secondsDiff / config.secondsFade(), 1.0D));
+            boolean success1 = drawCustomBackground(context, screen, texturePrevious, config.brightness(), 1.0F);
+            boolean success2 = drawCustomBackground(context, screen, textureCurrent, config.brightness(), (float) Math.min(secondsDiff / config.secondsFade(), 1.0D));
             if (secondsDiff > config.secondsFade()) {
                 stateSecondsStarted = secondsNow;
                 stateIsFading = false;
             }
+            return success1 && success2;
         } else {
-            drawCustomBackground(context, screen, textureCurrent, config.brightness(), 1.0F);
+            boolean success = drawCustomBackground(context, screen, textureCurrent, config.brightness(), 1.0F);
             if (secondsDiff > config.secondsStay()) {
                 stateSecondsStarted = secondsNow;
                 stateIsFading = true;
                 texturePrevious = textureCurrent;
                 textureCurrent = textures.next();
             }
+            return success;
         }
-
-        return true;
     }
 
-    public void drawCustomBackground(DrawContext context, Screen screen, Identifier texture, float brightness, float opacity) {
+    public boolean drawCustomBackground(DrawContext context, Screen screen, Identifier texture, float brightness, float opacity) {
         initFromScreen(screen);
 
+        if (texture == null || texture.equals(MissingSprite.getMissingSpriteId())) {
+            return false;
+        }
+
         var textureInfo = (TextureInfo) getTextureManager().getTexture(texture);
+
+        if (textureInfo == null || textureInfo == MissingSprite.getMissingSpriteTexture()) {
+            return false;
+        }
 
         textureInfo.loadingbackgrounds$init();
 
         float textureWidth = textureInfo.loadingbackgrounds$getWidth();
         float textureHeight = textureInfo.loadingbackgrounds$getHeight();
+
+        if (textureWidth <= 0 || textureHeight <= 0) {
+            return false;
+        }
+
         float screenWidth = screen.width;
         float screenHeight = screen.height;
 
@@ -201,6 +215,8 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
         RenderSystem.setShaderTexture(0, oldShaderTexture);
 
         RenderSystem.disableBlend();
+
+        return true;
     }
 
     public void drawDefaultBackground(DrawContext context, Screen screen) {
