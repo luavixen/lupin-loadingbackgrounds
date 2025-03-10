@@ -18,7 +18,7 @@ public abstract class MixinMessageScreen extends Screen {
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         if (
             LoadingBackgroundsImpl.isLoadingMessage(getTitle()) &&
-            LoadingBackgroundsImpl.getInstance().draw(context, this, false)
+            LoadingBackgroundsImpl.getInstance().draw(context, this, true)
         ) return;
         super.renderBackground(context, mouseX, mouseY, delta);
     }

@@ -133,24 +133,30 @@ public final class LoadingBackgroundsImpl extends Screen implements LoadingBackg
             textureCurrent = textures.next();
         }
 
+        boolean success;
+
         if (stateIsFading) {
-            boolean success1 = drawCustomBackground(context, screen, texturePrevious, config.brightness(), 1.0F);
-            boolean success2 = drawCustomBackground(context, screen, textureCurrent, config.brightness(), (float) Math.min(secondsDiff / config.secondsFade(), 1.0D));
+            success = drawCustomBackground(context, screen, texturePrevious, config.brightness(), 1.0F);
+            drawCustomBackground(context, screen, textureCurrent, config.brightness(), (float) Math.min(secondsDiff / config.secondsFade(), 1.0D));
             if (secondsDiff > config.secondsFade()) {
                 stateSecondsStarted = secondsNow;
                 stateIsFading = false;
             }
-            return success1 && success2;
         } else {
-            boolean success = drawCustomBackground(context, screen, textureCurrent, config.brightness(), 1.0F);
+            success = drawCustomBackground(context, screen, textureCurrent, config.brightness(), 1.0F);
             if (secondsDiff > config.secondsStay()) {
                 stateSecondsStarted = secondsNow;
                 stateIsFading = true;
                 texturePrevious = textureCurrent;
                 textureCurrent = textures.next();
             }
-            return success;
         }
+
+        if (!success && shouldDrawDefaultBackground) {
+            drawDefaultBackground(context, screen);
+        }
+
+        return success;
     }
 
     public boolean drawCustomBackground(DrawContext context, Screen screen, Identifier texture, float brightness, float opacity) {
